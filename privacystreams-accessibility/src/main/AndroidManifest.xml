@@ -7,7 +7,7 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:name="PrivacyStreams">
+            android:name=".MyAccessibilityService">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
                 <category android:name="android.accessibilityservice.category.FEEDBACK_GENERIC" />
