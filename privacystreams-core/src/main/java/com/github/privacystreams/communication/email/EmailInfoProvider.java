@@ -1,9 +1,8 @@
-package com.github.privacystreams.communication;
+package com.github.privacystreams.communication.email;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.github.privacystreams.communication.email.crypto.Signatory;
 import com.github.privacystreams.core.providers.MStreamProvider;
 
 import org.json.JSONArray;

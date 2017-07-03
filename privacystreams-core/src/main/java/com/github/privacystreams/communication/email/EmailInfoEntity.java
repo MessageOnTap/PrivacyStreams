@@ -1,7 +1,6 @@
-package com.github.privacystreams.communication;
+package com.github.privacystreams.communication.email;
 
 
-import com.github.privacystreams.communication.email.model.Domain;
 import com.github.privacystreams.core.Item;
 import com.github.privacystreams.core.providers.MStreamProvider;
 import com.google.gson.Gson;

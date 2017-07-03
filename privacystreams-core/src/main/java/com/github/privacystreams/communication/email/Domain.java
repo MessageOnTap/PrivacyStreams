@@ -1,4 +1,4 @@
-package com.github.privacystreams.communication.email.model;
+package com.github.privacystreams.communication.email;
 
 import java.util.HashMap;
 import java.util.Map;

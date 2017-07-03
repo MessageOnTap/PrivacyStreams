@@ -19,7 +19,6 @@ import com.github.privacystreams.commons.time.TimeOperators;
 import com.github.privacystreams.communication.Call;
 import com.github.privacystreams.communication.Contact;
 import com.github.privacystreams.communication.Email;
-import com.github.privacystreams.communication.EmailInfo;
 import com.github.privacystreams.communication.InstantMessage;
 import com.github.privacystreams.communication.Message;
 import com.github.privacystreams.core.Callback;

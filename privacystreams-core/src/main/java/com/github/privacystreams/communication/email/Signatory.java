@@ -1,4 +1,4 @@
-package com.github.privacystreams.communication.email.crypto;
+package com.github.privacystreams.communication.email;
 
 import java.security.SignatureException;
 import java.nio.charset.Charset;
