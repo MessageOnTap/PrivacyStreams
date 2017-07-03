@@ -130,15 +130,17 @@ public class EmailInfoProvider extends MStreamProvider {
         if(results == null)
             sifts = null;
         else {
-            System.out.println(results);
+            //System.out.println(results);
 
             for (int i = 0; i < results.length(); i++) {
-                System.out.println(results.get((i)));
+                //System.out.println(Integer.toBinaryString(i) + " " + results.get((i)));
                 EmailInfoEntity emailInfoEntity = EmailInfoEntity.unmarshallEmailInfoEntity(results.get((i)));
                 this.output(emailInfoEntity);
                 sifts.add(emailInfoEntity);
             }
         }
+
+
         return sifts;
     }
 

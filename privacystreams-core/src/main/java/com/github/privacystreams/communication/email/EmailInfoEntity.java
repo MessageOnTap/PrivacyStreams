@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 
@@ -17,13 +15,15 @@ public class EmailInfoEntity extends Item{
 	private static final String API_KEY = "29f043cde8b6636c395dc07fcac571f6";
 	private static final String API_SECRET = "54ce16efb4d67116ac485eb540ac3bb20907ef07";
 
-	private static Logger sLogger = LoggerFactory.getLogger(EmailInfoEntity.class);
-
 	private int mEmailInfoEntityId;
 	private String mMimeId;
 	private String mMid;
 	private String mFid;
 	private String mAccountId;
+
+	private final String DOMAIN = "domain";
+	private final String PAYLOAD = "payload";
+
 
 
 	public Domain getDomain() {
@@ -72,7 +72,7 @@ public class EmailInfoEntity extends Item{
 
 	public static EmailInfoEntity unmarshallEmailInfoEntity(Object result_obj) throws JSONException {
 		JSONObject result = new JSONObject(result_obj.toString());
-		System.out.println(result);
+		//System.out.println(result);
 		JSONObject payload = result.has("@type") ? result : result.getJSONObject("payload");
 		String type = payload.get("@type").toString();
 
@@ -83,18 +83,21 @@ public class EmailInfoEntity extends Item{
 		EmailInfoEntity emailInfoEntity;
 		try {
 			//emailInfoEntity = (emailInfoEntity) objectMapper.treeToValue((TreeNode) payload, Class.forName("com.easilydo.emailInfoEntity.model.gen." + type));
-			emailInfoEntity = (EmailInfoEntity) new Gson().fromJson(String.valueOf(payload), Class.forName("com.github.privacystreams.communication.emailInfoEntity.model.gen." + type));
+			emailInfoEntity = (EmailInfoEntity) new Gson().fromJson(String.valueOf(payload), Class.forName("com.github.privacystreams.communication.email.gen." + type));
 		} catch (ClassNotFoundException cnfex) {
-			sLogger.error("Could not find class for type: " + type);
 			emailInfoEntity = new EmailInfoEntity();
 		}
 
-		if (result.has("emailInfoEntity_id")) {
-			emailInfoEntity.setemailInfoEntityId((Integer) result.get("emailInfoEntity_id"));
+		if (result.has("sift_id")) {
+			emailInfoEntity.setemailInfoEntityId((Integer) result.get("sift_id"));
 			emailInfoEntity.setMimeId((String) result.get("mime_id"));
 			emailInfoEntity.setMid((String) result.get("mid"));
 			emailInfoEntity.setFid((String) result.get("fid"));
 			emailInfoEntity.setAccountId((String) result.get("account_id"));
+			emailInfoEntity.setFieldValue("id", result.get("sift_id")) ;
+			emailInfoEntity.setFieldValue("domain", result.get("domain")) ;
+			emailInfoEntity.setFieldValue("payload", result.get("payload"));
+			//this.setFieldValue(DOMAIN, );
 		}
 
 		return emailInfoEntity;
