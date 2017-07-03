@@ -21,6 +21,7 @@ import com.github.privacystreams.communication.Contact;
 import com.github.privacystreams.communication.Email;
 import com.github.privacystreams.communication.InstantMessage;
 import com.github.privacystreams.communication.Message;
+import com.github.privacystreams.communication.email.EmailInfoEntity;
 import com.github.privacystreams.core.Callback;
 import com.github.privacystreams.core.Function;
 import com.github.privacystreams.core.Item;
@@ -175,7 +176,7 @@ public class UseCases {
 
     public void testEmailInfoList(){
 
-            uqi.getData(EmailInfo.getAll(), Purpose.TEST("test")).debug();
+            uqi.getData(EmailInfoEntity.getAll(), Purpose.TEST("test")).debug();
     //                    .filter(ListOperators.intersects(Contact.PHONES, recentCalledPhoneNumbers.toArray()))
     //                .asList(Contact.NAME);
 

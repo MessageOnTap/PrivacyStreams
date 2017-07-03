@@ -52,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
 //            useCases.testEmailList();
 
 //useCases.testUpdatesContact();
-            useCases.testWifiUpdates();
+//            useCases.testWifiUpdates();
 //            useCases.testIMUIUpdates();
 //            useCases.testCalendarList();
+            useCases.testEmailInfoList();
 
 
 

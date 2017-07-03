@@ -48,6 +48,11 @@ import java.util.TimerTask;
         doEmailUpdates();
     }
 
+    @Override
+    public void onSuccess() {
+
+    }
+
 
     private void doEmailUpdates(){
         running = true;

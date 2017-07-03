@@ -43,5 +43,10 @@ class GmailListProvider extends BaseGmailProvider{
         new FetchEmailTask().execute(buildTimeQuery(mBegin,mEnd));
     }
 
+    @Override
+    public void onSuccess() {
+
+    }
+
 
 }
