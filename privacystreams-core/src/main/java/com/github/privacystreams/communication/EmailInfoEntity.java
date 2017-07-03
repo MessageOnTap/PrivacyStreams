@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 
 
 public class EmailInfoEntity extends Item{
+
+	private static final String API_KEY = "29f043cde8b6636c395dc07fcac571f6";
+	private static final String API_SECRET = "54ce16efb4d67116ac485eb540ac3bb20907ef07";
+
 	private static Logger sLogger = LoggerFactory.getLogger(EmailInfoEntity.class);
 
 	private int mEmailInfoEntityId;
@@ -98,8 +102,6 @@ public class EmailInfoEntity extends Item{
 	}
 
 	public static MStreamProvider getAll() {
-		return new EmailInfoProvider2();
+		return new EmailInfoProvider(API_KEY, API_SECRET);
 	}
-
-	public static MStreamProvider asUpdates() {return new ContactUpdatesProvider();}
 }
