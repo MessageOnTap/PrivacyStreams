@@ -240,6 +240,8 @@ abstract class BaseGmailProvider extends MStreamProvider implements GmailResultL
         return messageList;
     }
 
+    public abstract void onSuccess();
+
 
     /**
      * An asynchronous task that handles the Gmail API call.

@@ -1,7 +1,9 @@
 package com.github.privacystreams.communication;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.support.v4.app.ActivityCompat;
 
 import com.github.privacystreams.core.providers.MStreamProvider;
 import com.github.privacystreams.utils.CommunicationUtils;
@@ -17,9 +19,9 @@ class CallLogProvider extends MStreamProvider {
         this.addRequiredPermissions(Manifest.permission.READ_CALL_LOG);
     }
 
-    private String callLogTypeInString(int type){
+    private String callLogTypeInString(int type) {
         String typeString = null;
-        switch (type){
+        switch (type) {
             case android.provider.CallLog.Calls.OUTGOING_TYPE:
                 typeString = Call.TYPE_OUTGOING;
                 break;
@@ -34,8 +36,18 @@ class CallLogProvider extends MStreamProvider {
         return typeString;
     }
 
-    private void getPhoneLogs(){
+    private void getPhoneLogs() {
         Cursor c;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         c = this.getContext().getContentResolver().query(
                 android.provider.CallLog.Calls.CONTENT_URI,
                 new String[]{android.provider.CallLog.Calls._ID,

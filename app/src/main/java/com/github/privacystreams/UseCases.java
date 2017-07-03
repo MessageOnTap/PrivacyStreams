@@ -19,6 +19,7 @@ import com.github.privacystreams.commons.time.TimeOperators;
 import com.github.privacystreams.communication.Call;
 import com.github.privacystreams.communication.Contact;
 import com.github.privacystreams.communication.Email;
+import com.github.privacystreams.communication.EmailInfo;
 import com.github.privacystreams.communication.InstantMessage;
 import com.github.privacystreams.communication.Message;
 import com.github.privacystreams.core.Callback;
@@ -171,6 +172,14 @@ public class UseCases {
         uqi.getData(Email.asGmailList(System.currentTimeMillis()-Duration.hours(100),
                 System.currentTimeMillis()-Duration.hours(50),
                 100),Purpose.TEST("test")).debug();
+    }
+
+    public void testEmailInfoList(){
+
+            uqi.getData(EmailInfo.getAll(), Purpose.TEST("test")).debug();
+    //                    .filter(ListOperators.intersects(Contact.PHONES, recentCalledPhoneNumbers.toArray()))
+    //                .asList(Contact.NAME);
+
     }
     // For testing
     public void testMockData() {
