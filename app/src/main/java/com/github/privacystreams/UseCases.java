@@ -1,6 +1,8 @@
 package com.github.privacystreams;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -349,6 +351,14 @@ public class UseCases {
         uqi.getData(CalendarEvent.getAll(), Purpose.FEATURE("for test")).debug();
     }
 
+    public Intent testOAuth(){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key=29f043cde8b6636c395dc07fcac571f6&username=Mars&token=e50e70477d420f0de34b4ca8447d460b"));
+        return browserIntent;
+    }
+
+    public void testNewSiftUsername(){
+
+    }
     void callbackWhenReceivesMessage(String appName, Callback<String> messageCallback){
         uqi
                 .getData(Message.asIncomingSMS(), Purpose.FEATURE(""));
