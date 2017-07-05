@@ -40,6 +40,7 @@ public class EmailInfoProvider extends MStreamProvider {
 
     private String mApiKey;
     private Signatory mSignatory;
+    private boolean mAuthorized = false;
 
     String mPath;
     JSONArray mJsonArray;
@@ -252,4 +253,7 @@ public class EmailInfoProvider extends MStreamProvider {
         listEmailInfoEntity("Mars");
     }
 
+    public void authorizeUser(){
+
+    }
 }

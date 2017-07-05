@@ -128,7 +128,7 @@ public class EmailInfoEntity extends Item{
 
 	private static boolean isLeaf(String str){
 		if(str.equals("") || str.charAt(0) == ',' || str.charAt(0) == '[' || str.charAt(0) == '{'
-				|| str.charAt(0) == ']' || str.charAt(0) == '}')
+				|| str.charAt(0) == ']' || str.charAt(0) == '}' || str.equals("null"))
 			return false;
 		return true;
 	}
