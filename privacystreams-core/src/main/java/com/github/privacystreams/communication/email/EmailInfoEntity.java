@@ -8,8 +8,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import static com.github.privacystreams.utils.JSONUtils.getJsonLeafNodes;
 
 
 public class EmailInfoEntity extends Item{
@@ -98,11 +99,10 @@ public class EmailInfoEntity extends Item{
 			emailInfoEntity.setAccountId((String) result.get("account_id"));
 			emailInfoEntity.setFieldValue("id", result.get("sift_id")) ;
 			emailInfoEntity.setFieldValue("domain", result.get("domain")) ;
-			Map<String, String> additionalProperties = getLeafs(result.getString("payload"));
+			Map<String, String> additionalProperties = getJsonLeafNodes(result.getString("payload"));
 			for(String str: additionalProperties.values()){
 				emailInfoEntity.setFieldValue(str, additionalProperties.get(str));
 			}
-			//this.setFieldValue(DOMAIN, );
 		}
 
 		return emailInfoEntity;
@@ -112,24 +112,5 @@ public class EmailInfoEntity extends Item{
 		return new EmailInfoProvider(API_KEY, API_SECRET);
 	}
 
-	public static Map<String, String> getLeafs(String payload){
 
-		Map<String, String> result = new HashMap<>();
-		String[] splitPayload = payload.split("\"");
-		for(int i=1;i<splitPayload.length-1;i++){
-			if(splitPayload[i].equals(":")) {
-				if (isLeaf(splitPayload[i - 1]) && isLeaf(splitPayload[i + 1])) {
-					result.put(splitPayload[i - 1], splitPayload[i + 1]);
-				}
-			}
-		}
-		return result;
-	}
-
-	private static boolean isLeaf(String str){
-		if(str.equals("") || str.charAt(0) == ',' || str.charAt(0) == '[' || str.charAt(0) == '{'
-				|| str.charAt(0) == ']' || str.charAt(0) == '}' || str.equals("null"))
-			return false;
-		return true;
-	}
 }

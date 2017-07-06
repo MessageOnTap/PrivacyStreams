@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.github.privacystreams.core.providers.MStreamProvider;
+import com.github.privacystreams.utils.EmailUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +25,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.privacystreams.utils.EmailUtils.randomString;
+
 /**
  * Created by mars on 03/07/2017.
  */
@@ -39,7 +42,7 @@ public class EmailInfoProvider extends MStreamProvider {
     public static final String API_ENDPOINT = "https://api.easilydo.com";
 
     private String mApiKey;
-    private Signatory mSignatory;
+    private EmailUtils mEmailUtils;
     private boolean mAuthorized = false;
 
     String mPath;
@@ -52,7 +55,7 @@ public class EmailInfoProvider extends MStreamProvider {
      */
     public EmailInfoProvider(String apiKey, String secretKey) {
         this.mApiKey = apiKey;
-        this.mSignatory = new Signatory(secretKey);
+        this.mEmailUtils = new EmailUtils(secretKey);
     }
 
     /**
@@ -118,7 +121,11 @@ public class EmailInfoProvider extends MStreamProvider {
 
 
         try {
-            results = new EmailInfoProvider.FetchEmailInfoTask().execute(params).get();
+            String url = API_ENDPOINT + mPath + "?";
+            for(String str:params.keySet()){
+                url = url + "&" + str + "=" + params.get(str);
+            }
+            results = new EmailInfoProvider.FetchEmailInfoTask().execute(url).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -149,7 +156,7 @@ public class EmailInfoProvider extends MStreamProvider {
     protected Map<String,Object> addCommonParams(String method, String path, Map<String,Object> params) {
         params.put("api_key", mApiKey);
         params.put("timestamp", System.currentTimeMillis() / 1000);
-        params.put("signature", mSignatory.generateSignature(method, path, params));
+        params.put("signature", mEmailUtils.generateSignature(method, path, params));
 
         return params;
     }
@@ -158,7 +165,7 @@ public class EmailInfoProvider extends MStreamProvider {
         return date.getTime() / 1000;
     }
 
-    public class FetchEmailInfoTask extends AsyncTask<Map<String,Object>,String,JSONArray> {
+    public class FetchEmailInfoTask extends AsyncTask<String,String,JSONArray> {
 
         private String getResponseText(InputStream in){
             return new Scanner(in).useDelimiter("\\A").next();
@@ -169,19 +176,14 @@ public class EmailInfoProvider extends MStreamProvider {
         //Get authorization
         //Input URLs you want to get or post in String
         //Output: JSONObject(func Flight_JSON_To_FlightContent in edu.cmu.chimps.messageontap.utility.GenericUtils will help to change that into String)
-        protected JSONArray doInBackground(Map<String,Object>... params) {
+        protected JSONArray doInBackground(String... url) {
 
-            String url = API_ENDPOINT + mPath + "?";
-            for(String str:params[0].keySet()){
-                url = url + "&" + str + "=" + params[0].get(str);
-            }
-            System.out.println(url);
             JSONObject jsonObject = null;
             HttpURLConnection urlconnection = null;
             try {
 
                 //create connection
-                URL urlToRequest = new URL(url);
+                URL urlToRequest = new URL(url[0]);
                 urlconnection = (HttpURLConnection) urlToRequest.openConnection();
 
                 urlconnection.setRequestMethod("GET");
@@ -227,6 +229,8 @@ public class EmailInfoProvider extends MStreamProvider {
         }
 
 
+
+
         //Exit
         //Back to main Thread
         //Input JSONObject
@@ -242,8 +246,35 @@ public class EmailInfoProvider extends MStreamProvider {
      * authorization and permission from the activity all over again.
      */
 
+    public boolean addUser(String username, String locale) {
+        boolean flag = false;
+        String path = "/v1/users";
+        Map<String, Object> params = new HashMap();
+        params.put("username", username);
+        params.put("locale", locale);
+        addCommonParams("POST", path, params);
+        String url = API_ENDPOINT + path + "?";
+        for(String str:params.keySet()){
+            url = url + "&" + str + "=" + params.get(str);
+        }
+        try {
+            JSONArray results = new FetchEmailInfoTask().execute(url).get();
+            flag = true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
     protected void provide() {
-        listEmailInfoEntity("Mars");
+        if(mAuthorized == false) {
+            authorizeUser();
+        }
+        else {
+            listEmailInfoEntity("Mars");
+        }
     }
 
     /**
@@ -254,6 +285,9 @@ public class EmailInfoProvider extends MStreamProvider {
     }
 
     public void authorizeUser(){
-
+        addUser(randomString(), "en_US");
+        mAuthorized = true;
     }
+
+
 }
