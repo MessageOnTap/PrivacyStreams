@@ -1,10 +1,11 @@
 package com.github.privacystreams.communication.email;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.github.privacystreams.core.providers.MStreamProvider;
-import com.github.privacystreams.utils.EmailUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +26,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
-import static com.github.privacystreams.utils.EmailUtils.randomString;
+import static com.github.privacystreams.communication.email.Signatory.randomString;
 
 /**
  * Created by mars on 03/07/2017.
@@ -42,8 +43,10 @@ public class EmailInfoProvider extends MStreamProvider {
     public static final String API_ENDPOINT = "https://api.easilydo.com";
 
     private String mApiKey;
-    private EmailUtils mEmailUtils;
+    private Signatory mSignatory;
     private boolean mAuthorized = false;
+    private String mUser;
+    private String mToken;
 
     String mPath;
     JSONArray mJsonArray;
@@ -55,7 +58,7 @@ public class EmailInfoProvider extends MStreamProvider {
      */
     public EmailInfoProvider(String apiKey, String secretKey) {
         this.mApiKey = apiKey;
-        this.mEmailUtils = new EmailUtils(secretKey);
+        this.mSignatory = new Signatory(secretKey);
     }
 
     /**
@@ -125,7 +128,7 @@ public class EmailInfoProvider extends MStreamProvider {
             for(String str:params.keySet()){
                 url = url + "&" + str + "=" + params.get(str);
             }
-            results = new EmailInfoProvider.FetchEmailInfoTask().execute(url).get();
+            results = new FetchEmailInfoTask().execute(url).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -156,7 +159,7 @@ public class EmailInfoProvider extends MStreamProvider {
     protected Map<String,Object> addCommonParams(String method, String path, Map<String,Object> params) {
         params.put("api_key", mApiKey);
         params.put("timestamp", System.currentTimeMillis() / 1000);
-        params.put("signature", mEmailUtils.generateSignature(method, path, params));
+        params.put("signature", mSignatory.generateSignature(method, path, params));
 
         return params;
     }
@@ -273,7 +276,7 @@ public class EmailInfoProvider extends MStreamProvider {
             authorizeUser();
         }
         else {
-            listEmailInfoEntity("Mars");
+            listEmailInfoEntity(mUser);
         }
     }
 
@@ -281,12 +284,52 @@ public class EmailInfoProvider extends MStreamProvider {
      * When the app just got the authorization and permission from the activity, it goes to this callback.
      */
     public void onSuccess() {
-        listEmailInfoEntity("Mars");
+        listEmailInfoEntity(mUser);
     }
 
     public void authorizeUser(){
-        addUser(randomString(), "en_US");
+        mUser = randomString();
+        addUser(mUser, "en_US");
         mAuthorized = true;
+        mToken = getToken();
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key="+mApiKey
+                +"&username="+mUser+"&token="+mToken+""));
+
+
+    }
+
+    public String getToken(){
+
+        String resource = "/v1/connect_token";
+        String url = "https://api.easilydo.com" + resource;
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("api_key", mApiKey);
+        params.put("timestamp", System.currentTimeMillis() / 1000L);
+        params.put("username", mUser);
+
+        String signature = mSignatory.generateSignature("POST", resource, params);
+        params.put("signature", signature);
+
+        url = url + "?";
+        for(String str:params.keySet()){
+            url = url + "&" + str + "=" + params.get(str);
+        }
+
+        try {
+            JSONArray response = new FetchEmailInfoTask().execute(url).get();
+            JSONObject jsonObject = response.getJSONObject(1);
+            String token = jsonObject.getString("connect_token");
+            return token;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
 

@@ -23,6 +23,7 @@ public class EmailInfoEntity extends Item{
 	private String mMid;
 	private String mFid;
 	private String mAccountId;
+	private EmailInfoProvider mEmailInfoProvider;
 
 	private final String DOMAIN = "domain";
 	private final String PAYLOAD = "payload";

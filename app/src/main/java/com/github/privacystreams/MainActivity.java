@@ -1,6 +1,5 @@
 package com.github.privacystreams;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -50,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
 //
 //            useCases.testIMUpdates();
  //           useCases.testEmailUpdates();
-//            useCases.testEmailList();
+            useCases.testEmailList();
 
 //useCases.testUpdatesContact();
 //            useCases.testWifiUpdates();
 //            useCases.testIMUIUpdates();
 //            useCases.testCalendarList();
 //            useCases.testEmailInfoList();
-            Intent intent = useCases.testOAuth();
-            startActivity(intent);
+//            Intent intent = useCases.testOAuth();
+//            startActivity(intent);
 
 
 

@@ -1,4 +1,4 @@
-package com.github.privacystreams.utils;
+package com.github.privacystreams.communication.email;
 
 import java.nio.charset.Charset;
 import java.security.SignatureException;
@@ -15,14 +15,15 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by mars on 06/07/2017.
  */
 
-public class EmailUtils {
+public class Signatory {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     private String msecretKey;
+    public String m;
 
-    public EmailUtils(String secretKey) {
+    public Signatory(String secretKey) {
         this.msecretKey = secretKey;
     }
 
