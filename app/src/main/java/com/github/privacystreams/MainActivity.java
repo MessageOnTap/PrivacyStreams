@@ -1,5 +1,6 @@
 package com.github.privacystreams;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void OAuth(Intent intent){
+        startActivity(intent);
+
+    }
     private class MyAsyncTask extends AsyncTask<Object, Object, Object> {
         @Override
         protected Object doInBackground(Object[] objects) {
@@ -49,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
 //
 //            useCases.testIMUpdates();
  //           useCases.testEmailUpdates();
-            useCases.testEmailList();
+//            useCases.testEmailList();
 
 //useCases.testUpdatesContact();
 //            useCases.testWifiUpdates();
 //            useCases.testIMUIUpdates();
 //            useCases.testCalendarList();
-//            useCases.testEmailInfoList();
-//            Intent intent = useCases.testOAuth();
+            useCases.testEmailInfoList();
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key=29f043cde8b6636c395dc07fcac571f6&username=Mars&token=e50e70477d420f0de34b4ca8447d460b"));
 //            startActivity(intent);
 
 
