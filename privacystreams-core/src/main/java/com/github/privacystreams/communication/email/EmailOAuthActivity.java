@@ -13,7 +13,7 @@ import android.preference.PreferenceManager;
 
 public class EmailOAuthActivity extends Activity {
 
-    private String PREF_IS_EMAILINFO_AUTHORIZED = "isEmailinfoAuthorized"
+    private String PREF_IS_EMAILINFO_AUTHORIZED = "isEmailinfoAuthorized";
     private Intent mIntent;
     EmailOAuthActivity(Intent intent){
         this.mIntent = intent;
