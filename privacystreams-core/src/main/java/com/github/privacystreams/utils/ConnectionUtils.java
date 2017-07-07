@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.github.privacystreams.core.UQI;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,8 +27,7 @@ public class ConnectionUtils {
         WifiManager wifiManager = (WifiManager) uqi.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null || !wifiManager.isWifiEnabled()) return false;
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        if (wifiInfo == null || wifiInfo.getNetworkId() == -1) return false;
-        return wifiInfo.getSupplicantState() == SupplicantState.ASSOCIATED;
+        return !(wifiInfo == null || wifiInfo.getNetworkId() == -1) && wifiInfo.getSupplicantState() == SupplicantState.ASSOCIATED;
     }
 
     /* Checks whether the device currently has a network connection.
@@ -65,7 +63,7 @@ public class ConnectionUtils {
         final int connectionStatusCode =
                 apiAvailability.isGooglePlayServicesAvailable(context);
         if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-           Log.e("Error","Connection Status Code"+connectionStatusCode);
+           Logging.debug("Connection Status Code"+connectionStatusCode);
         }
     }
 

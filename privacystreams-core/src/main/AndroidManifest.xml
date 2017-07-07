@@ -3,6 +3,9 @@
     package="com.github.privacystreams.core">
 
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <application android:name="android.support.multidex.MultiDexApplication">
         <activity
             android:name="com.github.privacystreams.utils.PSPermissionActivity"

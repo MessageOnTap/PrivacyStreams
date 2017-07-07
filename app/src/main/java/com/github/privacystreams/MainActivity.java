@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("Button","Clicked");
                 new MyAsyncTask().execute();
             }
         });
@@ -63,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
             useCases.testEmailInfoList();
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key=29f043cde8b6636c395dc07fcac571f6&username=Mars&token=e50e70477d420f0de34b4ca8447d460b"));
 //            startActivity(intent);
+
+//            useCases.testWifiUpdates();
+
+//            useCases.testIMUIUpdates();
+//            useCases.testCalendarList();
+//            useCases.testWifiUpdates();
+//            useCases.newTestWifiTrueUpdates();
+//            useCases.testUpdatesCalendar();
 
 
 
