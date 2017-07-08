@@ -1,6 +1,7 @@
 package com.github.privacystreams.communication.email;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -297,7 +298,7 @@ public class EmailInfoProvider extends MStreamProvider {
      * When the app just got the authorization and permission from the activity, it goes to this callback.
      */
     public void onSuccess() {
-        //listEmailInfoEntity(mUser);
+        listEmailInfoEntity(mUser);
     }
 
     public void authorizeUser(){
@@ -305,6 +306,11 @@ public class EmailInfoProvider extends MStreamProvider {
         addUser(mUser, "en_US");
         mToken = getToken();
 
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+        editor.putString("ApiKey",mApiKey);
+        editor.putString("Username", mUser);
+        editor.putString("Token", mToken);
+        editor.apply();
         final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key="+mApiKey
                 +"&username="+mUser+"&token="+mToken+""));
         getContext().startActivity(browserIntent);
