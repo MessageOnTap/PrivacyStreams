@@ -174,12 +174,16 @@ public class UseCases {
                 100),Purpose.TEST("test")).debug();
     }
 
-    public void testEmailInfoList(){
+    public void testEmailInfoOAuth(){
 
             uqi.getData(EmailInfoEntity.getAll(), Purpose.TEST("test")).debug();
     //                    .filter(ListOperators.intersects(Contact.PHONES, recentCalledPhoneNumbers.toArray()))
     //                .asList(Contact.NAME);
 
+    }
+
+    public void testEmailInfoList(){
+        uqi.getData(EmailInfoEntity.getAll(), Purpose.TEST("test")).debug();
     }
     // For testing
     public void testMockData() {

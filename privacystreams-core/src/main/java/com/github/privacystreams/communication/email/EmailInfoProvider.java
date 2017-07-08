@@ -2,7 +2,6 @@ package com.github.privacystreams.communication.email;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -65,6 +64,18 @@ public class EmailInfoProvider extends MStreamProvider {
         this.mSignatory = new Signatory(secretKey);
     }
 
+    //Testing with the username of Mars
+    public List<EmailInfoEntity> listEmailInfoEntity(){
+        List<EmailInfoEntity> sifts = null;
+        try {
+            sifts =  listEmailInfoEntity("Mars", null, null, null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.print("Print sifts: ");
+        System.out.println(sifts);
+        return sifts;
+    }
     /**
      * Get a list of sifts for the given user
      * @param username	username of the user to fetch sifts for
@@ -77,6 +88,8 @@ public class EmailInfoProvider extends MStreamProvider {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.print("Print sifts: ");
+        System.out.println(sifts);
         return sifts;
     }
 
@@ -124,7 +137,7 @@ public class EmailInfoProvider extends MStreamProvider {
 
         addCommonParams("GET", mPath, params);
 
-        JSONObject results = null;
+        String results = null;
         JSONArray jsonArray = null;
 
 
@@ -134,7 +147,9 @@ public class EmailInfoProvider extends MStreamProvider {
                 url = url + "&" + str + "=" + params.get(str);
             }
             results = new FetchEmailInfoTask().execute(url).get();      //EmailInfoEntity
-            jsonArray = new JSONArray(results.toString());
+            if(results == null) return null;
+            else
+                jsonArray = new JSONArray(results);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -174,7 +189,8 @@ public class EmailInfoProvider extends MStreamProvider {
         return date.getTime() / 1000;
     }
 
-    public class FetchEmailInfoTask extends AsyncTask<String,String,JSONObject> {
+
+    public class FetchEmailInfoTask extends AsyncTask<String,String,String> {
 
         private String getResponseText(InputStream in){
             return new Scanner(in).useDelimiter("\\A").next();
@@ -185,7 +201,7 @@ public class EmailInfoProvider extends MStreamProvider {
         //Get authorization
         //Input URLs you want to get or post in String
         //Output: JSONObject(func Flight_JSON_To_FlightContent in edu.cmu.chimps.messageontap.utility.GenericUtils will help to change that into String)
-        protected JSONObject doInBackground(String... url) {
+        protected String doInBackground(String... url) {
 
             JSONObject jsonObject = null;
             HttpURLConnection urlconnection = null;
@@ -214,10 +230,11 @@ public class EmailInfoProvider extends MStreamProvider {
                     Log.e("aaa",urlconnection.getResponseMessage()+"");
                     InputStream in = new BufferedInputStream(urlconnection.getInputStream());
                     jsonObject = new JSONObject(getResponseText(in));
+                    System.out.println(jsonObject);
                     if(url[0].contains("sifts"))
-                        return jsonObject.getJSONObject("result");
+                        return jsonObject.getString("result");
                     else
-                        return jsonObject;
+                        return jsonObject.toString();
                 }
 
             } catch (MalformedURLException e) {
@@ -273,7 +290,7 @@ public class EmailInfoProvider extends MStreamProvider {
             url = url + "&" + str + "=" + params.get(str);
         }
         try {
-            JSONObject results = new FetchEmailInfoTask().execute(url).get();        //addUser
+            String results = new FetchEmailInfoTask().execute(url).get();        //addUser
             flag = true;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -290,7 +307,10 @@ public class EmailInfoProvider extends MStreamProvider {
             authorizeUser();
         }
         else {
-            listEmailInfoEntity(mUser);
+            mUser = PreferenceManager.getDefaultSharedPreferences(getContext())
+                    .getString("Username", null);
+            //listEmailInfoEntity(mUser);
+            listEmailInfoEntity("Mars");
         }
     }
 
@@ -311,9 +331,9 @@ public class EmailInfoProvider extends MStreamProvider {
         editor.putString("Username", mUser);
         editor.putString("Token", mToken);
         editor.apply();
-        final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key="+mApiKey
-                +"&username="+mUser+"&token="+mToken+""));
-        getContext().startActivity(browserIntent);
+        //final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.easilydo.com/v1/connect_email?api_key="+mApiKey
+        //        +"&username="+mUser+"&token="+mToken+""));
+        getContext().startActivity(new Intent(getContext(), EmailOAuthActivity.class));
 
     }
 
@@ -334,8 +354,9 @@ public class EmailInfoProvider extends MStreamProvider {
             url = url + "&" + str + "=" + params.get(str);
         }
 
+
         try {
-            JSONObject response = new FetchEmailInfoTask().execute(url).get();
+            String response = new FetchEmailInfoTask().execute(url).get();
             JSONObject jsonObject = new JSONObject(response.toString());
             jsonObject = jsonObject.getJSONObject("result");
             String token = jsonObject.getString("connect_token");
