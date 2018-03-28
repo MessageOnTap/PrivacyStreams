@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -45,13 +45,13 @@ dependencies {
 
     compile project(':privacystreams-android-sdk')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile "com.android.support:appcompat-v7:$support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.android.gms:play-services-location:11.0.4'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-vector-drawable:25.3.1'
+    compile "com.google.android.gms:play-services-location:$play_services_version"
+    compile "com.android.support:design:$support_lib_version"
+    compile "com.android.support:support-vector-drawable:$support_lib_version"
     testCompile 'junit:junit:4.12'
-    kapt 'com.android.databinding:compiler:2.3.2'
+    kapt "com.android.databinding:compiler:$compiler_version"
 }
 repositories {
     mavenCentral()
