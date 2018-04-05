@@ -44,6 +44,7 @@ class CalendarEventListProvider extends PStreamProvider {
                         CalendarContract.Events.DTSTART,
                         CalendarContract.Events.EVENT_LOCATION,
                         CalendarContract.Events.DTEND,
+                        CalendarContract.Events.DURATION
                 },
                 null,
                 null,
@@ -60,7 +61,6 @@ class CalendarEventListProvider extends PStreamProvider {
                 Long startTime = c.getLong(c.getColumnIndex(CalendarContract.Events.DTSTART));
                 Long endTime = c.getLong(c.getColumnIndex(CalendarContract.Events.DTEND));
                 String location = c.getString(c.getColumnIndex(CalendarContract.Events.EVENT_LOCATION));
-
                 String duration = c.getString(c.getColumnIndex(CalendarContract.Events.DURATION));
                 CalendarEvent calendarEvent = new CalendarEvent(id, title, startTime, endTime, duration, location);
                 output(calendarEvent);
