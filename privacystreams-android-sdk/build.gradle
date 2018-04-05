@@ -8,34 +8,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-ext {
-    bintrayName = 'PrivacyStreams-Android-SDK'
-    artifact = 'privacystreams-android-sdk'
-
-    libraryName = 'PrivacyStreams Android SDK'
-    libraryDescription = 'An Android library for easy and privacy-friendly personal data processing.'
-    libraryVersion = "0.1.7"
-
-    bintrayRepo = 'PrivacyStreams'
-    bintrayOrganization = "privacystreams"
-    publishedGroupId = 'com.github.chentc'
-
-    siteUrl = 'https://github.com/PrivacyStreams/PrivacyStreams'
-    gitUrl = 'https://github.com/PrivacyStreams/PrivacyStreams.git'
-    githubRepository= 'PrivacyStreams/PrivacyStreams'
-
-    developerId = 'ylimit'
-    developerName = 'Yuanchun Li'
-    developerEmail = 'pkulyc@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
@@ -61,8 +36,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'org.greenrobot:eventbus:3.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.greenrobot:eventbus:3.0.0'
     // third-party packages
     provided 'com.dropbox.core:dropbox-core-sdk:2.1.1'
     provided "com.google.android.gms:play-services:$play_services_version"
@@ -77,54 +52,19 @@ dependencies {
     provided('com.google.apis:google-api-services-gmail:v1-rev29-1.20.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile 'com.fasterxml.jackson.core:jackson-core:2.5.3'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.3'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.5.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.5.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     provided 'com.sun.mail:android-mail:1.5.5'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
-group = publishedGroupId                               // Maven Group ID for the artifact
+// yiad.am jfrog repo
+def libraryGroupId = 'privacystreams'
+def libraryArtifactId = 'privacystreams-android-sdk'
 
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                // Add your description here
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                // Set your license
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
-        }
-    }
-}
+def libraryVersion = '0.1.6.2-test'
 
 version = libraryVersion
 
@@ -162,45 +102,6 @@ artifacts {
 //    archives javadocJar
     archives sourcesJar
 }
-
-// Bintray
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-//        userOrg = bintrayOrganization
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        issueTrackerUrl = siteUrl+'/issues'
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        githubRepo = githubRepository //Optional Github repository
-        githubReleaseNotesFile = 'README.md' //Optional Github readme file
-        publish = false
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password")
-                //Optional. The passphrase for GPG signing'
-            }
-        }
-    }
-}
-// yiad.am jfrog repo
-def libraryGroupId = 'privacystreams'
-def libraryArtifactId = 'privacystreams-android-sdk'
-
-def libraryVersion = '0.1.6.2'
-
 
 publishing.publications {
         aar(MavenPublication) {
